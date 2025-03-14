@@ -8,18 +8,20 @@ jobs:
   notify_discord:
     runs-on: ubuntu-latest
     steps:
-      - name: Check Webhook URL
-        run: echo "DISCORD_WEBHOOK=${{ secrets.DISCORD_WEBHOOK }}" | sed 's/./& /g'
+      - name: Debug Check Webhook URL
+        run: |
+          echo "🔍 Checking DISCORD_WEBHOOK..."
+          if [ -z "${{ secrets.DISCORD_WEBHOOK }}" ]; then
+            echo "❌ ERROR: DISCORD_WEBHOOK is empty!"
+            exit 1
+          else
+            echo "✅ DISCORD_WEBHOOK is set."
+          fi
 
       - name: Send Release Note to Discord
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         run: |
-          if [ -z "$DISCORD_WEBHOOK" ]; then
-            echo "❌ ERROR: DISCORD_WEBHOOK is empty!"
-            exit 1
-          fi
-          
           RELEASE_NAME="${{ github.event.release.name }}"
           RELEASE_BODY=$(echo "${{ github.event.release.body }}" | jq -Rsa .)
 
