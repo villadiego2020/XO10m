@@ -1,43 +1,26 @@
-name: Notify Discord on Release
+name: Post Release Note to Discord
 
 on:
   release:
     types: [published]
 
 jobs:
-  notify_discord:
+  discord_notify:
     runs-on: ubuntu-latest
     steps:
-      - name: Debug Check Webhook URL 1
-        run: |
-          echo "DISCORD_WEBHOOK=${DISCORD_WEBHOOK}"
-          
-      - name: Debug Check Webhook URL 2
-        run: |
-          echo "🔍 Checking DISCORD_WEBHOOK..."
-          if [ -z "${DISCORD_WEBHOOK}" ]; then
-            echo "❌ ERROR: DISCORD_WEBHOOK is empty!"
-            exit 1
-          else
-            echo "✅ DISCORD_WEBHOOK is set."
-          fi     
-
-      - name: Send Release Note to Discord
+      - name: Send Release Note to Discord 1149
         env:
-          DISCORD_WEBHOOK: "${{ secrets.DISCORD_WEBHOOK }}"
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         run: |
-          RELEASE_NAME=$(echo '${{ github.event.release.name }}' | jq -Rsa .)
-          RELEASE_BODY=$(echo '${{ github.event.release.body }}' | jq -Rsa .)
-
           curl -H "Content-Type: application/json" \
           -X POST \
           -d '{
             "username": "GitHub Releases",
             "avatar_url": "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png",
             "embeds": [{
-              "title": "🚀 New Release: '"$RELEASE_NAME"'",
-              "description": '"$RELEASE_BODY"'',
-              "url": "'"${{ github.event.release.html_url }}"'",
-              "color": 16776960
+              "title": "🚀 New Release: '${{ github.event.release.name }}'",
+              "description": "${{ github.event.release.body }}",
+              "url": "${{ github.event.release.html_url }}",
+              "color": 16711680
             }]
-          }' "${DISCORD_WEBHOOK}"
+          }' $DISCORD_WEBHOOK
