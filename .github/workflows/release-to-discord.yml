@@ -36,4 +36,4 @@ jobs:
               "url": "'"${{ github.event.release.html_url }}"'",
               "color": 16776960
             }]
-          }' "$DISCORD_WEBHOOK"
+          }' "${DISCORD_WEBHOOK}"
