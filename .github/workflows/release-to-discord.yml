@@ -19,8 +19,8 @@ jobs:
             "avatar_url": "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png",
             "embeds": [{
               "title": "🚀 New Release: ${{ github.event.release.name }}",
-              "description": "${{ github.event.release.body }}",
+              "description": "📜 **Changelog:**\n\n${{ github.event.release.body }}",
               "url": "${{ github.event.release.html_url }}",
-              "color": 16711680
+              "color": 16776960
             }]
           }' $DISCORD_WEBHOOK
