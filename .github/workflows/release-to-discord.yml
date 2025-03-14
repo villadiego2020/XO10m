@@ -1,0 +1,26 @@
+name: Notify Discord on Release
+
+on:
+  release:
+    types: [published]  # Trigger เมื่อมีการ Publish Release
+
+jobs:
+  notify_discord:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send Release Note to Discord
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        run: |
+          curl -H "Content-Type: application/json" \
+          -X POST \
+          -d '{
+            "username": "GitHub Releases",
+            "avatar_url": "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png",
+            "embeds": [{
+              "title": "🚀 New Release: ${{ github.event.release.name }}",
+              "description": "${{ github.event.release.body }}",
+              "url": "${{ github.event.release.html_url }}",
+              "color": 16711680
+            }]
+          }' $DISCORD_WEBHOOK
