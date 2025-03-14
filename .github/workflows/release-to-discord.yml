@@ -22,8 +22,8 @@ jobs:
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         run: |
-          RELEASE_NAME="${{ github.event.release.name }}"
-          RELEASE_BODY=$(echo "${{ github.event.release.body }}" | jq -Rsa .)
+          RELEASE_NAME=$(echo '${{ github.event.release.name }}' | jq -Rsa .)
+          RELEASE_BODY=$(echo '${{ github.event.release.body }}' | jq -Rsa .)
 
           curl -H "Content-Type: application/json" \
           -X POST \
