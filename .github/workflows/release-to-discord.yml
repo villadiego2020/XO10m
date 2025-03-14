@@ -20,7 +20,7 @@ jobs:
 
       - name: Send Release Note to Discord
         env:
-          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+          DISCORD_WEBHOOK: "${{ secrets.DISCORD_WEBHOOK }}"
         run: |
           RELEASE_NAME=$(echo '${{ github.event.release.name }}' | jq -Rsa .)
           RELEASE_BODY=$(echo '${{ github.event.release.body }}' | jq -Rsa .)
