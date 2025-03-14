@@ -10,13 +10,7 @@ jobs:
     steps:
       - name: Debug Check Webhook URL
         run: |
-          echo "🔍 Checking DISCORD_WEBHOOK..."
-          if [ -z "${{ secrets.DISCORD_WEBHOOK }}" ]; then
-            echo "❌ ERROR: DISCORD_WEBHOOK is empty!"
-            exit 1
-          else
-            echo "✅ DISCORD_WEBHOOK is set."
-          fi
+          echo "DISCORD_WEBHOOK=${DISCORD_WEBHOOK}"
 
       - name: Send Release Note to Discord
         env:
