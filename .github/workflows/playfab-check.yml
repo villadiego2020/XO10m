@@ -9,25 +9,30 @@ jobs:
   check-playfab:
     runs-on: ubuntu-latest
     steps:
-      - name: Debug Get PlayFab Entity Token
+      - name: Debug List PlayFab Functions
         run: |
           ENTITY_RESPONSE=$(curl -X POST "https://66293.playfabapi.com/Authentication/GetEntityToken" \
             -H "Content-Type: application/json" \
             -H "X-SecretKey: ${{ secrets.PLAYFAB_SECRET_KEY }}" \
             -d '{}')
       
-          echo "🔍 PlayFab Response: $ENTITY_RESPONSE"
+          ENTITY_TOKEN=$(echo $ENTITY_RESPONSE | jq -r '.data.EntityToken')
+      
+          curl -X POST "https://66293.playfabapi.com/CloudScript/ListFunctions" \
+            -H "Content-Type: application/json" \
+            -H "X-EntityToken: $ENTITY_TOKEN" \
+            -d '{}'
+
+      - name: Call PlayFab CloudScript (RunCloudScript)
+        run: |
+          ENTITY_RESPONSE=$(curl -X POST "https://66293.playfabapi.com/Authentication/GetEntityToken" \
+            -H "Content-Type: application/json" \
+            -H "X-SecretKey: ${{ secrets.PLAYFAB_SECRET_KEY }}" \
+            -d '{}')
       
           ENTITY_TOKEN=$(echo $ENTITY_RESPONSE | jq -r '.data.EntityToken')
       
-          if [ -z "$ENTITY_TOKEN" ] || [ "$ENTITY_TOKEN" == "null" ]; then
-            echo "❌ Failed to get EntityToken!"
-            exit 1
-          fi
-      
-          echo "✅ EntityToken received: $ENTITY_TOKEN"
-      
-          curl -X POST "https://66293.playfabapi.com/CloudScript/ExecuteFunction" \
+          curl -X POST "https://66293.playfabapi.com/Client/RunCloudScript" \
             -H "Content-Type: application/json" \
             -H "X-EntityToken: $ENTITY_TOKEN" \
             -d '{
@@ -35,4 +40,5 @@ jobs:
               "FunctionParameter": {},
               "RevisionSelection": "Live"
             }'
+
 
