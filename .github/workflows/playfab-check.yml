@@ -31,7 +31,7 @@ jobs:
             -H "Content-Type: application/json" \
             -H "X-EntityToken: $ENTITY_TOKEN" \
             -d '{
-              "FunctionName": "CheckAndNotifyDiscord",
+              "FunctionName": "AddExperienceToPlayer",
               "FunctionParameter": {},
               "RevisionSelection": "Live"
             }'
