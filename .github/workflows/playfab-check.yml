@@ -18,6 +18,11 @@ jobs:
       
           ENTITY_TOKEN=$(echo $ENTITY_RESPONSE | jq -r '.data.EntityToken')
       
+          if [ -z "$ENTITY_TOKEN" ] || [ "$ENTITY_TOKEN" == "null" ]; then
+            echo "❌ Failed to get EntityToken!"
+            exit 1
+          fi
+      
           curl -X POST "https://66293.playfabapi.com/CloudScript/ListFunctions" \
             -H "Content-Type: application/json" \
             -H "X-EntityToken: $ENTITY_TOKEN" \
@@ -30,9 +35,13 @@ jobs:
             -H "X-SecretKey: ${{ secrets.PLAYFAB_SECRET_KEY }}" \
             -d '{}')
       
+          echo "🔍 PlayFab Response: $ENTITY_RESPONSE"
+      
           ENTITY_TOKEN=$(echo $ENTITY_RESPONSE | jq -r '.data.EntityToken')
       
-          curl -X POST "https://66293.playfabapi.com/Client/RunCloudScript" \
+          echo "✅ EntityToken received: $ENTITY_TOKEN"
+      
+          curl -X POST "https://66293.playfabapi.com/CloudScript/ExecuteFunction" \
             -H "Content-Type: application/json" \
             -H "X-EntityToken: $ENTITY_TOKEN" \
             -d '{
