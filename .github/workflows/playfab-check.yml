@@ -1,0 +1,21 @@
+name: PlayFab Deployment Check
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'  # รันทุก 5 นาที
+  workflow_dispatch:  # ให้รันเองได้ด้วย
+
+jobs:
+  check-playfab:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call PlayFab CloudScript
+        run: |
+          curl -X POST "https://titleId.playfabapi.com/CloudScript/ExecuteFunction" \
+            -H "Content-Type: application/json" \
+            -H "X-SecretKey: ${{ secrets.PLAYFAB_SECRET_KEY }}" \
+            -d '{
+              "FunctionName": "CheckAndNotifyDiscord",
+              "FunctionParameter": {},
+              "GeneratePlayStreamEvent": true
+            }'
