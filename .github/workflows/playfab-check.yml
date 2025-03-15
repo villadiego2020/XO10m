@@ -9,12 +9,14 @@ jobs:
   check-playfab:
     runs-on: ubuntu-latest
     steps:
-      - name: Debug List PlayFab Functions
+      - name: Debug Get PlayFab Entity Token
         run: |
           ENTITY_RESPONSE=$(curl -X POST "https://66293.playfabapi.com/Authentication/GetEntityToken" \
             -H "Content-Type: application/json" \
             -H "X-SecretKey: ${{ secrets.PLAYFAB_SECRET_KEY }}" \
             -d '{}')
+      
+          echo "🔍 PlayFab Response: $ENTITY_RESPONSE"
       
           ENTITY_TOKEN=$(echo $ENTITY_RESPONSE | jq -r '.data.EntityToken')
       
@@ -23,13 +25,8 @@ jobs:
             exit 1
           fi
       
-          curl -X POST "https://66293.playfabapi.com/CloudScript/ListFunctions" \
-            -H "Content-Type: application/json" \
-            -H "X-EntityToken: $ENTITY_TOKEN" \
-            -d '{}'
-
-      - name: Call PlayFab CloudScript (ExecuteFunction)
-        run: |
+          echo "✅ EntityToken received: $ENTITY_TOKEN"
+      
           curl -X POST "https://66293.playfabapi.com/CloudScript/ExecuteFunction" \
             -H "Content-Type: application/json" \
             -H "X-EntityToken: $ENTITY_TOKEN" \
@@ -38,6 +35,3 @@ jobs:
               "FunctionParameter": {},
               "RevisionSelection": "Live"
             }'
-
-
-
