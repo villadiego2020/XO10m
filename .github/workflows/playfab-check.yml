@@ -41,7 +41,7 @@ jobs:
       
           echo "✅ EntityToken received: $ENTITY_TOKEN"
       
-          curl -X POST "https://66293.playfabapi.com/Client/RunCloudScript" \
+          curl -X POST "https://66293.playfabapi.com/Client/ExecuteCloudScript" \
             -H "Content-Type: application/json" \
             -H "X-EntityToken: $ENTITY_TOKEN" \
             -d '{
