@@ -28,26 +28,16 @@ jobs:
             -H "X-EntityToken: $ENTITY_TOKEN" \
             -d '{}'
 
-      - name: Call PlayFab CloudScript (RunCloudScript)
+      - name: Call PlayFab CloudScript (ExecuteFunction)
         run: |
-          ENTITY_RESPONSE=$(curl -X POST "https://66293.playfabapi.com/Authentication/GetEntityToken" \
+          curl -X POST "https://66293.playfabapi.com/CloudScript/ExecuteFunction" \
             -H "Content-Type: application/json" \
             -H "X-SecretKey: ${{ secrets.PLAYFAB_SECRET_KEY }}" \
-            -d '{}')
-      
-          echo "🔍 PlayFab Response: $ENTITY_RESPONSE"
-      
-          ENTITY_TOKEN=$(echo $ENTITY_RESPONSE | jq -r '.data.EntityToken')
-      
-          echo "✅ EntityToken received: $ENTITY_TOKEN"
-      
-          curl -X POST "https://66293.playfabapi.com/Client/ExecuteCloudScript" \
-            -H "Content-Type: application/json" \
-            -H "X-EntityToken: $ENTITY_TOKEN" \
             -d '{
               "FunctionName": "CheckAndNotifyDiscord",
               "FunctionParameter": {},
               "RevisionSelection": "Live"
             }'
+
 
 
