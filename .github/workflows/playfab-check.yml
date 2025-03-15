@@ -11,7 +11,7 @@ jobs:
     steps:
       - name: Call PlayFab CloudScript
         run: |
-          curl -X POST "https://TitleId.playfabapi.com/CloudScript/ExecuteFunction" \
+          curl -X POST "https://66293.playfabapi.com/CloudScript/ExecuteFunction" \
             -H "Content-Type: application/json" \
             -H "X-SecretKey: ${{ secrets.PLAYFAB_SECRET_KEY }}" \
             -d '{
