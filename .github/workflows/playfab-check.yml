@@ -18,29 +18,15 @@ jobs:
       
           echo "🔍 PlayFab Response: $ENTITY_RESPONSE"
       
-          ENTITY_TOKEN=$(echo $ENTITY_RESPONSE | jq -r '.EntityToken')
+          ENTITY_TOKEN=$(echo $ENTITY_RESPONSE | jq -r '.data.EntityToken')
       
           if [ -z "$ENTITY_TOKEN" ] || [ "$ENTITY_TOKEN" == "null" ]; then
             echo "❌ Failed to get EntityToken!"
             exit 1
           fi
-
-      - name: Get PlayFab Entity Token
-        run: |
-          ENTITY_RESPONSE=$(curl -X POST "https://66293.playfabapi.com/Authentication/GetEntityToken" \
-            -H "Content-Type: application/json" \
-            -H "X-SecretKey: ${{ secrets.PLAYFAB_SECRET_KEY }}" \
-            -d '{}')
-
-          ENTITY_TOKEN=$(echo $ENTITY_RESPONSE | jq -r '.EntityToken')
-
-          if [ -z "$ENTITY_TOKEN" ] || [ "$ENTITY_TOKEN" == "null" ]; then
-            echo "❌ Failed to get EntityToken!"
-            exit 1
-          fi
-
-          echo "✅ EntityToken received"
-
+      
+          echo "✅ EntityToken received: $ENTITY_TOKEN"
+      
           curl -X POST "https://66293.playfabapi.com/CloudScript/ExecuteFunction" \
             -H "Content-Type: application/json" \
             -H "X-EntityToken: $ENTITY_TOKEN" \
@@ -49,3 +35,4 @@ jobs:
               "FunctionParameter": {},
               "GeneratePlayStreamEvent": true
             }'
+
