@@ -33,6 +33,6 @@ jobs:
             -d '{
               "FunctionName": "CheckAndNotifyDiscord",
               "FunctionParameter": {},
-              "GeneratePlayStreamEvent": true
+              "RevisionSelection": "Live"
             }'
 
